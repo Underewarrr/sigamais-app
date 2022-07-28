@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useMemo, useState} from 'react'
 import {Formik, Form, Field, ErrorMessage} from 'formik'
 import * as Yup from 'yup'
 import { Link } from 'react-router-dom'
@@ -17,12 +17,27 @@ const {history} = props
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
 
+
+
+    const success = [
+      'Você fez login com sucesso!',
+    ]
+    const Success = ({ active }) => {
+      return active && (
+        <ul>
+          {success.map((value, index) => (
+            <li key={index}>{value}</li>
+          ))}
+        </ul>
+      );
+    }
+
     const memoizedSuccess = useMemo(() => 
     <Success active={successLogin}>
       <Alert variant="success">
       Logado com sucesso
       </Alert>
-    </Success>, [showErrors]);
+    </Success>, [memoizedSuccess]);
 
 
     function generateToken () {
