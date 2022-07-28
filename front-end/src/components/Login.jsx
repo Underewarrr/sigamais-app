@@ -17,6 +17,13 @@ const {history} = props
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
 
+    const memoizedSuccess = useMemo(() => 
+    <Success active={successLogin}>
+      <Alert variant="success">
+      Logado com sucesso
+      </Alert>
+    </Success>, [showErrors]);
+
 
     function generateToken () {
         const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -124,9 +131,7 @@ const {history} = props
 
         </div>
         
-        <Alert variant="success" show={successLogin}>
-        Logado com sucesso
-        </Alert>
+        {memoizedSuccess}
         <div class="spinner-grow text-primary" role="status">
 
         </div>
