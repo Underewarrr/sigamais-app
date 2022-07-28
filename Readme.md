@@ -17,3 +17,5 @@
 ### Configs
 Test User
 teste@gmail.com 	123456
+
+First [pr](https://github.com/Underewarrr/sigamais-app/pull/1)
