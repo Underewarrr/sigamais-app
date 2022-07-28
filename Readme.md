@@ -13,3 +13,7 @@
     Express
     Mysql
     Nodemon
+
+### Configs
+Test User
+teste@gmail.com 	123456
