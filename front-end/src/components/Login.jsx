@@ -19,13 +19,13 @@ const {history} = props
 
 
 
-    const success = [
+    const successMSG = [
       'Você fez login com sucesso!',
     ]
     const Success = ({ active }) => {
       return active && (
         <Alert>
-          {success.map((value, index) => (
+          {successMSG.map((value, index) => (
             <p key={index}>{value}</p>
           ))}
         </Alert>
