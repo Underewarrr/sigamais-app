@@ -15,7 +15,9 @@
     Nodemon
 
 ### Configs
-Test User
-teste@gmail.com 	123456
+> Email : teste@gmail.com
 
-First [pr](https://github.com/Underewarrr/sigamais-app/pull/1)
+> Senha: 	123456
+
+### Ordem de Pull Requests
+- [Front-End](https://github.com/Underewarrr/sigamais-app/pull/1)
