@@ -24,19 +24,16 @@ const {history} = props
     ]
     const Success = ({ active }) => {
       return active && (
-        <ul>
+        <Alert>
           {success.map((value, index) => (
-            <li key={index}>{value}</li>
+            <p key={index}>{value}</p>
           ))}
-        </ul>
+        </Alert>
       );
     }
 
     const memoizedSuccess = useMemo(() => 
     <Success active={successLogin}>
-      <Alert variant="success">
-      Logado com sucesso
-      </Alert>
     </Success>, [memoizedSuccess]);
 
 
