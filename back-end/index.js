@@ -82,7 +82,11 @@ app.post("/register", (req, res) => {
   
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
         if (err) {
-            res.status(500).send(err);
+            res.json({
+                status: 'error',
+                message: 'Erro ao logar'
+            });
+            
         } else {
             if (result.length > 0) {
                 if (result[0].password === password) {
