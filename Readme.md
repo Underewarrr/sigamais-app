@@ -20,5 +20,9 @@
 > Senha: 	123456
 
 ### Ordem de Pull Requests
-- [Front-End] [Cria sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/1)
-- [Back-End] [Cria sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/3)
+ ***Front-End*** 
+> - [Cria sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/1)
+> - [Melhoria no sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/4)
+ ***Back-End***
+> - [Cria sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/3)
+> - [Melhoria no sistema de login e registro](https://github.com/Underewarrr/sigamais-app/pull/5)
