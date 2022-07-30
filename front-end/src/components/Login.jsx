@@ -22,16 +22,13 @@ const {history} = props
         const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
         setToken(token);
     }
-    useEffect(() => {
-        generateToken();
-    } , [token]);
 
         const handleClickLogin = (values) => { 
       axios.post("http://localhost:3001/login", {
       email: values.email,
       password: values.password,
     }).then((response) => {
-      if (response.data === "Login realizado com sucesso") {
+      if (response.data.status === "success") {
         setLoadingLogin(true);
         generateToken();
         setTimeout (() => {

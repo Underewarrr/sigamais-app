@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
 import Painel from './components/Painel';
-import RegisterSocialMedia from './components/RegisterSocialMedia';
+import RegisterSocialMedia from './components/RegisterSocialMedia.jsx';
 
 function App() {
   return (

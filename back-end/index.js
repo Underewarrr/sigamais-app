@@ -73,7 +73,6 @@ app.post('/painel/add/users_instagram', (req, res) => {
         }
     });
 });
-
     
 app.post("/register", (req, res) => {
     const { email, password } = req.body;
