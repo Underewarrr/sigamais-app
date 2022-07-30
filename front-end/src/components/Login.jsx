@@ -28,7 +28,7 @@ const {history} = props
       email: values.email,
       password: values.password,
     }).then((response) => {
-      if (response.data === "Login realizado com sucesso") {
+      if (response.data.status === "success") {
         setLoadingLogin(true);
         generateToken();
         setTimeout (() => {

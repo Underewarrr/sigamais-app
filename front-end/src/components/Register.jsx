@@ -22,7 +22,7 @@ const Register = () => {
         })
         .then(function (response) {
             console.log(response.data);
-            if (response.data === "Usuário criado com sucesso") {
+            if (response.data.status === "success") {
                 setLoadingRegister(true);
                 setTimeout (() => {
                 setSuccessRegister(true);
