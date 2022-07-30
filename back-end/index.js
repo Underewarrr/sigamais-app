@@ -18,8 +18,8 @@ const db = mysql.createPool({
 
 
 
+const { email, username, codsecurity} = req.body;
 app.post('/register/users_instagram', (req, res) => {
-    const { email, username, codsecurity} = req.body;
     db.query("SELECT * FROM users_instagram WHERE email = ?", [email], (err, result) => {
         if (result.length > 0) {
             res.json({
@@ -46,8 +46,7 @@ app.post('/register/users_instagram', (req, res) => {
 
     
 app.post("/register", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
   
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
        
@@ -77,8 +76,8 @@ app.post("/register", (req, res) => {
   });
 
   app.post("/login", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
+    const { email, password } = req.body;
+
   
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
         if (err) {
