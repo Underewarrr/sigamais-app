@@ -19,12 +19,11 @@ const {history} = props
 
 
     function generateToken () {
-        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        setToken(token);
+      const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      setToken(token);
+      localStorage.setItem("token", token);
+        console.log(token)
     }
-    useEffect(() => {
-        generateToken();
-    } , [token]);
 
         const handleClickLogin = (values) => { 
       axios.post("http://localhost:3001/login", {
@@ -41,8 +40,8 @@ const {history} = props
 
         setTimeout(() => {
           history.push('/painel');
-          localStorage.setItem("token", token);
           localStorage.setItem("email", values.email);
+          console.log(response.data)
           setEmail(values.email);
         } , 3000);
 
