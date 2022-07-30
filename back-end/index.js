@@ -15,25 +15,33 @@ const db = mysql.createPool({
 
 
 app.post("/register", (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-  
-    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-       
+
+    return new Promise((resolve, reject) => {
+        db.query(`SELECT * FROM users WHERE email = '${req.body.email}'`, (err, result) => {
             if (result.length > 0) {
-                res.status(400).send("Usuário já existe");
+                reject({
+                    error: "Email já cadastrado"
+                });
             } else {
-                db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, password], (err, result) => {
+                db.query(`INSERT INTO users (email, password) VALUES ('${req.body.email}', '${req.body.password}')`, (err, result) => {
                     if (err) {
-                        res.status(500).send(err);
+                        reject({
+                            error: "Erro ao cadastrar usuário"
+                        });
                     } else {
-                        res.status(200).send("Usuário criado com sucesso");
+                        resolve({
+                            message: "Usuário cadastrado com sucesso"
+                        });
                     }
                 });
-        }
-        }
-    );
-  });
+            }
+        });
+    }).then(result => {
+        res.send(result);
+    }).catch(err => {
+        res.send(err);
+    });
+});
 
   app.post("/login", (req, res) => {
     const email = req.body.email;
