@@ -3,14 +3,20 @@ const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
 const axios = require('axios');
+const { json } = require('express');
 
+
+app.use(cors());
+app.use(express.json());
 
 const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: 'dbpassword',
-    database: 'dbname'
+    password: '88147988rA@',
+    database: 'sigamais'
 });
+
+
 
 
 
