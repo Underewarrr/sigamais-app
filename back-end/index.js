@@ -43,25 +43,27 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.post("/login", (req, res) => {
-    return new Promise((resolve, reject) => {
-        db.query(`SELECT * FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`, (err, result) => {
+  app.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+  
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+        if (err) {
+            res.status(500).send(err);
+        } else {
             if (result.length > 0) {
-                resolve({
-                    message: "Usuário logado com sucesso"
-                });
+                if (result[0].password === password) {
+                    res.status(200).send("Login realizado com sucesso");
+                } else {
+                    res.status(400).send("Senha incorreta");
+                }
             } else {
-                reject({
-                    error: "Usuário ou senha incorretos"
-                });
+                res.status(400).send("Usuário não existe");
             }
-        });
-    }).then(result => {
-        res.send(result);
-    }).catch(err => {
-        res.send(err);
-    });
-});
+        }
+        }
+    );
+  });
 
 
 app.listen(3001,  () => {
