@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const cors = require('cors');
 const axios = require('axios');
 
+
 const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
@@ -11,8 +12,7 @@ const db = mysql.createPool({
     database: 'dbname'
 });
 
-app.use(cors());
-app.use(express.json());
+
 
 app.post("/register", (req, res) => {
     const email = req.body.email;
