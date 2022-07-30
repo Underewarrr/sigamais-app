@@ -16,10 +16,33 @@ const db = mysql.createPool({
     database: 'sigamais'
 });
 
+app.get('/painel/get/users_instagram', (req, res) => {
+    db.query(`SELECT * FROM users_instagram`, (err, results) => {
+        if (err) {
+            res.json({
+                status: 'error',
+                message: err
+            })
+        } else {
+            res.json({
+                status: 'success',
+                data: {
+                    id: results[0].id,
+                    username: results[0].username,
+                    password: results[0].password,
+                    email: results[0].email,
+
+                }
+            })
 
 
-const { email, username, codsecurity} = req.body;
-app.post('/register/users_instagram', (req, res) => {
+
+        }
+    })
+})
+
+app.post('/painel/add/users_instagram', (req, res) => {
+    const { email, username, codsecurity} = req.body;
     db.query("SELECT * FROM users_instagram WHERE email = ?", [email], (err, result) => {
         if (result.length > 0) {
             res.json({
@@ -36,7 +59,14 @@ app.post('/register/users_instagram', (req, res) => {
                 } else {
                     res.json({
                         status: 'success',
-                        message: 'Cadastrado com sucesso'
+                        message: 'Cadastrado com sucesso',
+                        result: {
+                            id: result.insertId,
+                            email: email,
+                            username: username,
+                            codsecurity: codsecurity,
+
+                        }
                     });
                 }
             });
@@ -77,7 +107,6 @@ app.post("/register", (req, res) => {
 
   app.post("/login", (req, res) => {
     const { email, password } = req.body;
-
   
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
         if (err) {
