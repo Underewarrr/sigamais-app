@@ -1,13 +1,12 @@
 import React from 'react'
 import Footer from './Footer'
 import Header from './Header'
-import RegistredSocialMedia from './RegistredSocialMedia'
+import RegisterSocialMedia from './RegisterSocialMedia'
 
 const Painel = () => {
   return (
     <div>
         <Header />
-        <RegistredSocialMedia />
         <Footer />
     </div>
   )
