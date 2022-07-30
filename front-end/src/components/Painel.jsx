@@ -7,7 +7,6 @@ const Painel = () => {
   return (
     <div>
         <Header />
-        <RegisterSocialMedia />
         <Footer />
     </div>
   )

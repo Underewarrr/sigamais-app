@@ -17,14 +17,14 @@ const RegisterSocialMedia = () => {
 
 
    const handleClickRegister = (values) => {
-        axios.post('http://localhost:3001/register/instagram', {
+        axios.post('http://localhost:3001/register/users_instagram', {
             email: values.email,
             username: values.username,
             codsecurity: values.codsecurity,
         })
         .then(function (response) {
             console.log(response.data);
-            if (response.data === "Usuário criado com sucesso") {
+            if (response.data.status === "success") {
                 setLoadingRegister(true);
                 setTimeout (() => {
                 setSuccessRegister(true);
@@ -61,6 +61,7 @@ const RegisterSocialMedia = () => {
 
     return (
         <>
+        <Header />
         <section className="vh-100">
         <div className="container">
         <div className="row">
@@ -118,7 +119,6 @@ const RegisterSocialMedia = () => {
         </div>
         </div>
         </section>
-        <Footer />
         {loadginRegister && <Alert variant="success">
             <Alert.Heading>Registrando...</Alert.Heading>
             <p>
@@ -137,6 +137,7 @@ const RegisterSocialMedia = () => {
         Sua conta foi registrada com sucesso.
         </p>
         </Alert>}
+        <Footer />
         </>
     )}
 
