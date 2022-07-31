@@ -17,7 +17,7 @@ const RegisterSocialMedia = () => {
 
 
    const handleClickRegister = (values) => {
-        axios.post('http://localhost:3001/register/users_instagram', {
+        axios.post('http://localhost:3001/painel/add/users_instagram', {
             email: values.email,
             username: values.username,
             codsecurity: values.codsecurity,
@@ -25,16 +25,15 @@ const RegisterSocialMedia = () => {
         .then(function (response) {
             console.log(response.data);
             if (response.data.status === "success") {
-                setRegistredInstagram(response.data)
                 setLoadingRegister(true);
                 setTimeout (() => {
-                setSuccessRegister(true);
+                    setSuccessRegister(true);
                 }
                 , 2500);
                     setTimeout(() => {
                         setLoadingRegister(false);
                         setSuccessRegister(false);
-                    } , 3000);
+                    } , 4000);
             }
             else {
                 setLoadingRegister(true);
@@ -111,6 +110,24 @@ const RegisterSocialMedia = () => {
             </center>
             </div>
             </Form>
+            {loadginRegister && <Alert variant="success">
+                <Alert.Heading>Registrando...</Alert.Heading>
+                <p>
+                Aguarde...
+                </p>
+                </Alert>}
+            {errorRegister && <Alert variant="danger">
+            <Alert.Heading>Erro</Alert.Heading>
+            <p>
+                Ocorreu um erro ao registrar sua conta.
+                </p>
+                </Alert>}
+            {successRegister && <Alert variant="success">
+            <Alert.Heading>Sucesso</Alert.Heading>
+            <p>
+            Sua conta foi registrada com sucesso.
+            </p>
+            </Alert>}
         </Container>
         )}
         </Formik>
@@ -120,24 +137,6 @@ const RegisterSocialMedia = () => {
         </div>
         </div>
         </section>
-        {loadginRegister && <Alert variant="success">
-            <Alert.Heading>Registrando...</Alert.Heading>
-            <p>
-            Aguarde...
-            </p>
-            </Alert>}
-        {errorRegister && <Alert variant="danger">
-        <Alert.Heading>Erro</Alert.Heading>
-        <p>
-            Ocorreu um erro ao registrar sua conta.
-            </p>
-            </Alert>}
-        {successRegister && <Alert variant="success">
-        <Alert.Heading>Sucesso</Alert.Heading>
-        <p>
-        Sua conta foi registrada com sucesso.
-        </p>
-        </Alert>}
         <Footer />
         </>
     )}
