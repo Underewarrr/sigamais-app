@@ -19,7 +19,7 @@ Entre na pasta back-end e front-end e rode `npm install`
 
 Após a instalação incie o servidor do back-end com
 
-`npm run devStart` desa maneira ao salvar seu arquivo não tem necessidade de reiniciar o node
+`npm run devStart` dessa maneira ao salvar seu arquivo não tem necessidade de reiniciar o node
 
 ou 
 
