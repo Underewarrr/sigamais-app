@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
-const axios = require('axios');
-const { json } = require('express');
 
 
 app.use(cors());
@@ -12,7 +10,7 @@ app.use(express.json());
 const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
-    password: '88147988rA@',
+    password: '',
     database: 'sigamais'
 });
 
@@ -106,7 +104,6 @@ app.post("/register", (req, res) => {
 
   app.post("/login", (req, res) => {
     const { email, password } = req.body;
-  
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
         if (err) {
             res.json({
