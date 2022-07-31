@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1deb5ubuntu1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Jul 28, 2022 at 07:57 PM
--- Server version: 8.0.29-0ubuntu0.22.04.2
--- PHP Version: 8.1.2
+-- Host: 127.0.0.1
+-- Tempo de geração: 31-Jul-2022 às 21:59
+-- Versão do servidor: 10.4.24-MariaDB
+-- versão do PHP: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,47 +18,79 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sigamais`
+-- Banco de dados: `sigamais`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Estrutura da tabela `users`
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `email` varchar(45) NOT NULL,
   `password` varchar(200) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `users`
+-- Extraindo dados da tabela `users`
 --
 
 INSERT INTO `users` (`id`, `email`, `password`) VALUES
-(2, 'teste@gmail.com', '123456');
+(1, 'teste@gmail.com', '123456')
+
+-- --------------------------------------------------------
 
 --
--- Indexes for dumped tables
+-- Estrutura da tabela `users_instagram`
+--
+
+CREATE TABLE `users_instagram` (
+  `id` int(11) NOT NULL,
+  `email` varchar(45) DEFAULT NULL,
+  `username` varchar(45) DEFAULT NULL,
+  `codsecurity` varchar(200) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Extraindo dados da tabela `users_instagram`
+--
+
+INSERT INTO `users_instagram` (`id`, `email`, `username`, `codsecurity`) VALUES
+(1, 'teste', 'teste', 'teste')
+
+--
+-- Índices para tabelas despejadas
 --
 
 --
--- Indexes for table `users`
+-- Índices para tabela `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Índices para tabela `users_instagram`
+--
+ALTER TABLE `users_instagram`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT de tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+
+--
+-- AUTO_INCREMENT de tabela `users_instagram`
+--
+ALTER TABLE `users_instagram`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
