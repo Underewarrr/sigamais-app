@@ -15,7 +15,7 @@ Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecime
     Nodemon
 
 ### Configs
-Entre na pasta backend e frontend e rode `npm install`
+Entre na pasta back-end e front-end e rode `npm install`
 
 Após a instalação incie o servidor do back-end com
 
@@ -25,7 +25,7 @@ ou
 
 `node index.js`
 
-Agora entre na pasta do front end e inicie o app
+Agora entre na pasta do front-end e inicie o app
 
 `npm start`
 ### Importante
