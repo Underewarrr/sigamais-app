@@ -24,6 +24,7 @@ const {history} = props
     }
 
         const handleClickLogin = (values) => { 
+          console.log(values)
       axios.post("http://localhost:3001/login", {
       email: values.email,
       password: values.password,
@@ -162,8 +163,8 @@ const {history} = props
       </Formik>
     </div>
   </div>
-  <Footer />
 </section>
+  <Footer />
 </>
   )
 }
