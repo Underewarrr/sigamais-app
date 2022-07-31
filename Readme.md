@@ -1,4 +1,5 @@
 ## Em construção
+Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecimento com node e javascript etc...
 
 ### Ferramentas Utilizadas no Front-End
     Axios
@@ -14,7 +15,31 @@
     Nodemon
 
 ### Configs
-> Em Construção
+Entre na pasta backend e frontend e rode `npm install`
+
+Após a instalação incie o servidor do back-end com
+
+`npm run devStart` desa maneira ao salvar seu arquivo não tem necessidade de reiniciar o node
+
+ou 
+
+`node index.js`
+
+Agora entre na pasta do front end e inicie o app
+
+`npm start`
+### Importante
+Configure sua database com o schema.sql que esta na pasta do backend
+
+Não esqueça de preencher seus dados no index.js na pasta back-end
+
+`const db = mysql.createPool({
+    host: '127.0.0.1',
+    user: 'usuario database',
+    password: 'senha database',
+    database: 'nome database'
+});`
+
 ### Imagens
 <details>
 <h2> Header </h2>
