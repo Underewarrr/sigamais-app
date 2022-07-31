@@ -7,7 +7,6 @@
     React-bootstrap 
     Yup 
 ### Ferramentas Utilizadas no Back-End
-    Axios
     Cors
     Ejs (Not Utilized YET)
     Express
