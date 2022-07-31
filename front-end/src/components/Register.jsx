@@ -133,8 +133,8 @@ const Register = () => {
         </Formik>      
     </div>
 </div>
-  <Footer />
 </section>
+  <Footer />
   </>
     )
 } 
