@@ -17,12 +17,6 @@ const {history} = props
     const [email, setEmail] = useState('');
     const [token, setToken] = useState('');
 
-
-    function generateToken () {
-        const token = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-        setToken(token);
-    }
-
         const handleClickLogin = (values) => { 
           console.log(values)
       axios.post("http://localhost:3001/login", {
@@ -31,7 +25,7 @@ const {history} = props
     }).then((response) => {
       if (response.data.status === "success") {
         setLoadingLogin(true);
-        generateToken();
+        console.log(token)
         setTimeout (() => {
           setSuccessLogin(true);
         }
@@ -39,9 +33,10 @@ const {history} = props
 
         setTimeout(() => {
           history.push('/painel');
-          localStorage.setItem("token", token);
+          localStorage.setItem("token", 'testeToken');
           localStorage.setItem("email", values.email);
           setEmail(values.email);
+          setToken('testeToken');
         } , 3000);
 
         setTimeout(() => {

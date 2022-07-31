@@ -65,7 +65,7 @@ const RegisterSocialMedia = () => {
         <section className="vh-100">
         <div className="container">
         <div className="row">
-        <div className="col-md-6 mx-auto">
+        <div className="col-md-20 mx-auto">
         <div className="card">
         <div className="card-header">
         <h3 className="card-title">Registre sua conta do instagram</h3>
@@ -103,10 +103,12 @@ const RegisterSocialMedia = () => {
             </div>
             <div className="form-group">
             <center>
+            <div class="d-grid gap-2">
                 <button type="submit" className="btn btn-primary btn-lg btn-block" disabled={isSubmitting}>
             {isSubmitting && <span className="spinner-border spinner-border-sm mr-1"></span>}
             Registrar
             </button>
+            </div>
             </center>
             </div>
             </Form>

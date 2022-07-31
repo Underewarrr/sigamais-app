@@ -31,7 +31,7 @@ const UserMenu = () => {
                         <Link
                         style={{ color: '#0d6efd' }}
                         to ="/painel/cadastrar">
-                        Cadastrar
+                        Cadastrar rede social
                         </Link>
                     </a>
 
