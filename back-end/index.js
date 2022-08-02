@@ -9,11 +9,9 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-const secret = process.env.JWT_SECRET;
 
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbName = process.env.DB_NAME;
+const tokenSecret = process.env.TOKEN_SECRET;
+
 
 const db = mysql.createPool({
     host: '127.0.0.1',
@@ -102,51 +100,37 @@ app.post('/auth/register', async (req, res) => {
 
 app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({
-            message: 'Please fill in all fields'
-        });
-    }
-    if (!email.includes('@')) {
-        return res.status(400).json({
-            message: 'Please enter a valid email address'
-        });
-    }
-    if (!email) {
-        return res.status(400).json({
-            message: 'Please enter an email address'
-        });
-    }
-    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-    if (err) {
-        res.json({
-            status: 'error',
-            message: 'Erro when trying to login'
-        });
-        
-    } else {
-        if (result.length > 0) {
-            const token = jwt.sign({
-                id: result[0].id
-            }, secret, {
-                expiresIn: '1h'
-            });
-            if (bcrypt.compare(password, result[0].password)) {
-                res.json({
-                    message: 'Logged with success'}, token );
-            } else {
-                res.json({
-                    message: 'Wrong password'
-                });
-            }
-        } else {
+    db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
+        if (err) {
             res.json({
                 status: 'error',
-                message: 'Email não cadastrado'
+                message: err
             });
+            
+        } else {
+            if (result.length > 0) {
+                if ((bcrypt.compareSync(password, result[0].password))) {
+                    res.json({
+                        status: 'success',
+                        message: 'Login realizado com sucesso'
+                    });
+
+                } else {
+                    res.json({
+                        status: 'error',
+                        message: 'Senha incorreta'
+                    });
+
+                }
+            } else {
+                res.json({
+                    status: 'error',
+                    message: 'Email não cadastrado'
+                });
+            }
         }
-    }
-    });
+        }
+    );
 });
                 
             
