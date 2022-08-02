@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.post('/auth/register', async (req, res) => {
-    const { username, email, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
@@ -61,14 +61,17 @@ app.post('/auth/register', async (req, res) => {
             // Hash password
             // Insert user into database
             db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, hashedPassword], (err, result) => {
-                if (err) {
+                try {
+                if (result) {
+                    return res.status(200).json({
+                        message: 'User created'
+                    });
+                }
+                } catch (err) {
                     return res.status(400).json({
                         message: 'Something went wrong'
                     });
                 }
-                return res.status(200).json({
-                    message: 'User created'
-                });
             });
         }
     });
