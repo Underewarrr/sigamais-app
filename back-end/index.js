@@ -102,7 +102,7 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
         if (err) {
-            res.json({
+            res.status(400).json({
                 status: 'error',
                 message: err
             });
@@ -110,20 +110,26 @@ app.post('/auth/login', async (req, res) => {
         } else {
             if (result.length > 0) {
                 if ((bcrypt.compareSync(password, result[0].password))) {
-                    res.json({
+                    const token = jwt.sign({
+                        id: result[0].id
+                    }, tokenSecret, {
+                        expiresIn: '1h'
+                    });
+                    res.status(200).json({
                         status: 'success',
-                        message: 'Login realizado com sucesso'
+                        message: 'Login realizado com sucesso',
+                        token: token
                     });
 
                 } else {
-                    res.json({
+                    res.status(400).json({
                         status: 'error',
                         message: 'Senha incorreta'
                     });
 
                 }
             } else {
-                res.json({
+                res.status(400).json({
                     status: 'error',
                     message: 'Email não cadastrado'
                 });
