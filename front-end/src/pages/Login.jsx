@@ -1,8 +1,13 @@
 import React from 'react'
+import { Button } from '../component'
 
-const Login = () => {
+
+const Login = ( { theme }) => {
+
   return (
-    <div>Login</div>
+    <div>
+        <Button theme={theme}/>
+    </div>
   )
 }
 
