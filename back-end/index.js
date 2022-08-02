@@ -69,15 +69,18 @@ app.post('/auth/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // insert user into database
+    try {
     const [result] = await db.query(
         'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
         [username, email, hashedPassword]
     );
+    } catch (error) {
     if (result.affectedRows === 0) {
         return res.status(400).json({
             message: 'Something went wrong'
         });
     }
+}
 });
 
 
