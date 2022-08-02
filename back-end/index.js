@@ -73,7 +73,7 @@ app.post('/auth/register', async (req, res) => {
                 message: 'Please enter a valid email address'
             });
         }
-        if (!result) {
+        if (result) {
             return res.status(400).json({
                 message: 'Email already exists'
             });
@@ -140,34 +140,32 @@ app.post('/auth/login', async (req, res) => {
 });
              
 // Private routes
-app.post('/users/:id', async (req, res) => {
+app.get('/users/:id', async (req, res) => {
     const { id } = req.params;
     // check if user exists in database
-    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id], (err, result) => {
-        if (err) {
-            res.status(400).json({
-                status: 'error',
-                message: err
+    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id]);
+    if (user.length === 0) {
+      return  res.status(404).json({
+        status: 'error',
+      })
+    
+    } else {
+        if (user.length > 0) {
+            // get user id without password from database
+            db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
+                if (err) {
+                    res.status(500).send({
+                        error: err
+                    });
+                } else {
+                    res.json({
+                        user: result[0].id
+                    });
+                }
             });
-        } else {
-            if (result.length > 0) {
-                res.status(200).json({
-                    status: 'success',
-                    message: 'User found',
-                    user: result[0].id
-                });
-            } else {
-                res.status(400).json({
-                    status: 'error',
-                    message: 'User not found'
-                });
-            }
-        }
-    });
-   
-
-});            
-
+        } 
+    }
+})
 
 app.listen(3001,  () => {
     console.log('Server is running on port 3001');
