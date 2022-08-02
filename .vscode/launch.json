@@ -1,0 +1,17 @@
+{
+    "configurations": [
+    {
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen",
+        "name": "nodemon",
+        "program": "${workspaceRoot}/node_modules/.bin/nodemon",
+        "request": "launch",
+        "restart": true,
+        "runtimeExecutable": "nodemon",
+        "skipFiles": [
+            "<node_internals>/**"
+        ],
+        "type": "node"
+    }
+    ]
+}
