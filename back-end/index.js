@@ -29,65 +29,52 @@ app.get('/', (req, res) => {
 
 app.post('/auth/register', async (req, res) => {
     const { username, email, password, confirmPassword } = req.body;
-
-    if (password !== confirmPassword) {
-        return res.status(400).json({
-            message: 'Passwords do not match'
-        });
-    }
-    if (!username || !email || !password) {
-        return res.status(400).json({
-            message: 'Please fill in all fields'
-        });
-    }
-    if (password.length < 8) {
-        return res.status(400).json({
-            message: 'Password must be at least 8 characters long'
-        });
-    }
-    if (!email.includes('@')) {
-        return res.status(400).json({
-            message: 'Please enter a valid email address'
-        });
-    }
-    if (username.length < 3) {
-        return res.status(400).json({
-            message: 'Username must be at least 3 characters long'
-        });
-    }
-   // check if user exist
-  
-    const user = await db.query("SELECT * FROM users WHERE email = ?", [email], 
-    (err, result) => {
-        if (err) {
-            return res.status(500).json({
-                message: 'Something went wrong'
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                message: 'Passwords do not match'
+            });
+        }
+        if (!username || !email || !password) {
+            return res.status(400).json({
+                message: 'Please fill in all fields'
+            });
+        }
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: 'Password must be at least 8 characters long'
+            });
+        }
+        if (!email.includes('@')) {
+            return res.status(400).json({
+                message: 'Please enter a valid email address'
+            });
+        }
+        if (username.length < 3) {
+            return res.status(400).json({
+                message: 'Username must be at least 3 characters long'
             });
         }
         if (result.length > 0) {
             return res.status(400).json({
-                message: 'User already exists'
+                message: 'Email already exists'
             });
         }
-    }
-    );
-    // hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    // insert user into database
-    const insertUser = await db.query(
-        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword],
-        (err, result) => {
-            if (err) {
-                return res.status(500).json({
-                    message: 'Something went wrong'
+        else {
+            db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, password], (err, result) => {
+                if (err) {
+                    return res.status(400).json({
+                        message: 'Something went wrong'
+                    });
+                }
+                return res.status(200).json({
+                    message: 'User created'
                 });
-            }
-            return res.status(200).json({
-                message: 'User created'
             });
-        });
+        }
+    });
 });
+
 
 
 
