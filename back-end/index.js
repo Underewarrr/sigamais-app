@@ -24,15 +24,23 @@ const db = mysql.createPool({
 
 
 // Private routes
-app.get('/user/:id', async (req, res) => {
-    const { id } = req.params;
-    // check if user exists in database
-    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id]);
-    if (user.length === 0) {
-      return  res.status(404).json({
-        status: 
-      });
-    } 
+app.post('/users/:id', async (req, res) => {
+    const { id } = req.params
+    // get user id without password from database
+db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
+        if (err) {
+            res.status(500).send({
+                error: err
+            });
+        } else {
+            res.json({
+                user: result[0]
+            });
+        }
+    });
+   
+   
+});
 
 
 // Public routes
