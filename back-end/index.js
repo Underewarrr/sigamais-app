@@ -77,7 +77,58 @@ app.post('/auth/register', async (req, res) => {
     });
 });
 
+app.post('/auth/login', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        return res.status(400).json({
+            message: 'Please fill in all fields'
+        });
+    }
+    if (!email.includes('@')) {
+        return res.status(400).json({
+            message: 'Please enter a valid email address'
+        });
+    }
+    if (!email) {
+        return res.status(400).json({
+            message: 'Please enter an email address'
+        });
+    }
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+    if (err) {
+        res.json({
+            status: 'error',
+            message: 'Erro ao logar'
+        });
+        
+    } else {
+        if (result.length > 0) {
+            if (bcrypt.compare(password, result[0].password)) {
+                res.json({
+                    status: 'success',
+                    message: 'Login realizado com sucesso'
+                });
 
+            } else {
+                res.json({
+                    status: 'error',
+                    message: 'Senha incorreta'
+                });
+
+            }
+        } else {
+            res.json({
+                status: 'error',
+                message: 'Email não cadastrado'
+            });
+        }
+    }
+    }
+);
+}
+);
+                
+            
 
 
 app.listen(3001,  () => {
