@@ -1,6 +1,8 @@
 ## Em construção
 Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecimento com node e javascript etc...
 
+React, Context API...
+
 ### Ferramentas Utilizadas no Front-End
     Axios
     Bootstrap
