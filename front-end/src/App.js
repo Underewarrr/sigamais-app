@@ -1,19 +1,17 @@
 import './App.css';
-import { Login } from "./pages";
-import React, { createContext } from 'react';
-
-const context = createContext();
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import { Login } from './pages';
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
-  const theme = 'light';
-
-
+ 
   return (
-   
-    <div className="App">
-     <Login theme={ theme }/>
-    </div>
-  
+    <BrowserRouter>
+    <Switch>
+      <Route exact path="/login" component={ Login } />
+    </Switch> 
+    </BrowserRouter>
   );
 }
 
