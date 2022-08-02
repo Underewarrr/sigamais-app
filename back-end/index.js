@@ -9,51 +9,16 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-const secret = process.env.JWT_SECRET;
 
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
-
 const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'sigamais'
 });
-
-
-
-function authToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    // Bearer token
-    // Dividi o token em 2 partes, o Bearer e o token
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.status(401).json({
-        error: 'Token não encontrado'
-    });
-}
-
-// Private routes
-app.post('/users/:id', authToken, async (req, res) => {
-    const { id } = req.params
-    // get user id without password from database
-db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
-    delete result[0].password;
-    // remove password from result
-        if (err) {
-            res.status(500).send({
-                error: err
-            });
-        } else {
-            res.json({
-                user: result[0]
-            });
-        }
-    });
-   
-});
-
 
 // Public routes
 app.get('/', (req, res) => {
@@ -63,107 +28,82 @@ app.get('/', (req, res) => {
 });
 
 app.post('/auth/register', async (req, res) => {
-    const { email, password, confirmPassword } = req.body;
+    const { username, email, password, confirmPassword } = req.body;
+    if (password !== confirmPassword) {
+        return res.status(400).json({
+            message: 'Passwords do not match'
+        });
+    }
+    if (!username || !email || !password || !confirmPassword) {
+        return res.status(400).json({
+            message: 'Please fill all fields'
+        });
+    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-        if (password !== confirmPassword) {
-            return res.status(400).json({
-                message: 'Passwords do not match'
-            });
-        }
-        if (!email || !password) {
-            return res.status(400).json({
-                message: 'Please fill in all fields'
-            });
-        }
-        if (password.length < 8) {
-            return res.status(400).json({
-                message: 'Password must be at least 8 characters long'
-            });
-        }
-        if (!email.includes('@')) {
-            return res.status(400).json({
-                message: 'Please enter a valid email address'
-            });
-        }
+    const user = {
+        username,
+        email,
+        password: hashedPassword
+    };
+    // check if user already exists
+    const userExists = await db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+       if (!email || !password) {
+              return res.status(400).json({
+                    message: 'Please fill all fields'
+                });
+            }
+
         if (result.length > 0) {
-            return res.status(400).json({
-                message: 'Email already exists'
+           return res.status(400).json({
+               message: 'User already exists'
+           });
+       }
+    const insertUser = db.query("INSERT INTO users SET ?", user, (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Something went wrong'
             });
         }
-        else {
-            // Hash password
-            // Insert user into database
-            db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, hashedPassword], (err, result) => {
-                try {
-                if (result) {
-                    return res.status(200).json({
-                        message: 'User created'
-                    });
-                }
-                } catch (err) {
-                    return res.status(400).json({
-                        message: 'Something went wrong'
-                    });
-                }
-            });
-        }
+       if (result) {
+           return res.status(201).json({
+               message: 'User created'
+           });
+       }
     });
+});
+
+        
+
 });
 
 app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
-    if (!email || !password) {
-        return res.status(400).json({
-            message: 'Please fill in all fields'
-        });
-    }
-    if (!email.includes('@')) {
-        return res.status(400).json({
-            message: 'Please enter a valid email address'
-        });
-    }
-    if (!email) {
-        return res.status(400).json({
-            message: 'Please enter an email address'
-        });
-    }
     db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-    if (err) {
-        res.json({
-            status: 'error',
-            message: 'Erro when trying to login'
-        });
-        
-    } else {
-        if (result.length > 0) {
-            const token = jwt.sign({
-                id: result[0].id
-            }, secret, {
-                expiresIn: '1h'
-            });
-            if (bcrypt.compare(password, result[0].password)) {
-                res.json({
-                    message: 'Logged with success'}, token );
-            } else {
-                res.json({
-                    message: 'Wrong password'
-                });
-            }
-        } else {
-            res.json({
-                status: 'error',
-                message: 'Email não cadastrado'
+        if (err) {
+            res.status(500).json({
+                message: 'Something went wrong'
             });
         }
-    }
-    });
-});
-                
-            
-
-
+        if (result.length === 0) {
+            res.status(400).json({
+                message: 'User does not exist'
+            });
+        }
+        const user = result[0];
+        const isMatch = bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            res.status(400).json({
+                message: 'Incorrect password'
+            });
+        }
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+        res.status(200).json({
+            message: 'Logged in',
+            token
+        });
+    })
+})
 app.listen(3001,  () => {
     console.log('Server is running on port 3001');
 });
