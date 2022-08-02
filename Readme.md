@@ -5,7 +5,8 @@ Autenticação Node + JWT https://github.com/Underewarrr/sigamais-app/issues/12
 
 Rotas da API
 
-![image](https://user-images.githubusercontent.com/74227915/182372819-5c7c979d-3bbe-43f8-ad1b-f7274e68578b.png)
+![image](https://user-images.githubusercontent.com/74227915/182411968-dc4fab0a-2acc-4c89-b3c8-0bda2efb0dcc.png)
+
 
 ### Configs
 Entre na pasta back-end e front-end e rode `npm install`
