@@ -14,12 +14,26 @@ const secret = process.env.JWT_SECRET;
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 const dbName = process.env.DB_NAME;
+
 const db = mysql.createPool({
     host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'sigamais'
 });
+
+
+// Private routes
+app.get('/user/:id', async (req, res) => {
+    const { id } = req.params;
+    // check if user exists in database
+    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id]);
+    if (user.length === 0) {
+      return  res.status(404).json({
+        status: 
+      });
+    } 
+
 
 // Public routes
 app.get('/', (req, res) => {
@@ -82,13 +96,11 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({
-            status: 'error',
             message: 'Please fill in all fields'
         });
     }
     if (!email.includes('@')) {
         return res.status(400).json({
-            status: 'error',
             message: 'Please enter a valid email address'
         });
     }
@@ -101,7 +113,7 @@ app.post('/auth/login', async (req, res) => {
     if (err) {
         res.json({
             status: 'error',
-            message: 'Erro ao logar'
+            message: 'Erro when trying to login'
         });
         
     } else {
@@ -113,12 +125,10 @@ app.post('/auth/login', async (req, res) => {
             });
             if (bcrypt.compare(password, result[0].password)) {
                 res.json({
-                    status: 'success',
-                    message: 'Login realizado com sucesso'}, token );
+                    message: 'Logged with success'}, token );
             } else {
                 res.json({
-                    status: 'error',
-                    message: 'Senha incorreta'
+                    message: 'Wrong password'
                 });
             }
         } else {
