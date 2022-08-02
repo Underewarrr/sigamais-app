@@ -56,32 +56,39 @@ app.post('/auth/register', async (req, res) => {
         });
     }
    // check if user exist
-    const [user] = await db.query(
-        'SELECT * FROM users WHERE username = ? OR email = ?',
-        [username, email]
-    );
-    if (user) {
-        return res.status(400).json({
-            message: 'User already exists'
-        });
+  
+    const user = await db.query("SELECT * FROM users WHERE email = ?", [email], 
+    (err, result) => {
+        if (err) {
+            return res.status(500).json({
+                message: 'Something went wrong'
+            });
+        }
+        if (result.length > 0) {
+            return res.status(400).json({
+                message: 'User already exists'
+            });
+        }
     }
+    );
     // hash password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     // insert user into database
-    try {
-    const [result] = await db.query(
-        'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-        [username, email, hashedPassword]
-    );
-    } catch (error) {
-    if (result.affectedRows === 0) {
-        return res.status(400).json({
-            message: 'Something went wrong'
+    const insertUser = await db.query(
+        "INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword],
+        (err, result) => {
+            if (err) {
+                return res.status(500).json({
+                    message: 'Something went wrong'
+                });
+            }
+            return res.status(200).json({
+                message: 'User created'
+            });
         });
-    }
-}
 });
+
 
 
 app.listen(3001,  () => {
