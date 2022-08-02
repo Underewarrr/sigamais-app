@@ -23,11 +23,18 @@ const db = mysql.createPool({
 });
 
 
+
+function authToken(req, res, next) {
+    const authHeader = req.headers.authorization;
+}
+
 // Private routes
 app.post('/users/:id', async (req, res) => {
     const { id } = req.params
     // get user id without password from database
 db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
+    delete result[0].password;
+    // remove password from result
         if (err) {
             res.status(500).send({
                 error: err
@@ -38,7 +45,6 @@ db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
             });
         }
     });
-   
    
 });
 
