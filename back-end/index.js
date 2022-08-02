@@ -9,6 +9,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+const secret = process.env.JWT_SECRET;
 
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
@@ -81,11 +82,13 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         return res.status(400).json({
+            status: 'error',
             message: 'Please fill in all fields'
         });
     }
     if (!email.includes('@')) {
         return res.status(400).json({
+            status: 'error',
             message: 'Please enter a valid email address'
         });
     }
@@ -103,18 +106,20 @@ app.post('/auth/login', async (req, res) => {
         
     } else {
         if (result.length > 0) {
+            const token = jwt.sign({
+                id: result[0].id
+            }, secret, {
+                expiresIn: '1h'
+            });
             if (bcrypt.compare(password, result[0].password)) {
                 res.json({
                     status: 'success',
-                    message: 'Login realizado com sucesso'
-                });
-
+                    message: 'Login realizado com sucesso'}, token );
             } else {
                 res.json({
                     status: 'error',
                     message: 'Senha incorreta'
                 });
-
             }
         } else {
             res.json({
@@ -123,10 +128,8 @@ app.post('/auth/login', async (req, res) => {
             });
         }
     }
-    }
-);
-}
-);
+    });
+});
                 
             
 
