@@ -73,7 +73,7 @@ app.post('/auth/register', async (req, res) => {
                 message: 'Please enter a valid email address'
             });
         }
-        if (result.length > 0) {
+        if (!result) {
             return res.status(400).json({
                 message: 'Email already exists'
             });
@@ -102,7 +102,7 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
         if (err) {
-            res.status(400).json({
+            res.json({
                 status: 'error',
                 message: err
             });
@@ -122,14 +122,14 @@ app.post('/auth/login', async (req, res) => {
                     });
 
                 } else {
-                    res.status(400).json({
+                    res.json({
                         status: 'error',
                         message: 'Senha incorreta'
                     });
 
                 }
             } else {
-                res.status(400).json({
+                res.json({
                     status: 'error',
                     message: 'Email não cadastrado'
                 });
@@ -138,8 +138,35 @@ app.post('/auth/login', async (req, res) => {
         }
     );
 });
-                
-            
+             
+// Private routes
+app.post('/users/:id', async (req, res) => {
+    const { id } = req.params;
+    // check if user exists in database
+    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id], (err, result) => {
+        if (err) {
+            res.status(400).json({
+                status: 'error',
+                message: err
+            });
+        } else {
+            if (result.length > 0) {
+                res.status(200).json({
+                    status: 'success',
+                    message: 'User found',
+                    user: result[0].id
+                });
+            } else {
+                res.status(400).json({
+                    status: 'error',
+                    message: 'User not found'
+                });
+            }
+        }
+    });
+   
+
+});            
 
 
 app.listen(3001,  () => {
