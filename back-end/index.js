@@ -25,17 +25,11 @@ const db = mysql.createPool({
 
 
 function authToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    // Bearer token
-    // Dividi o token em 2 partes, o Bearer e o token
-    const token = authHeader && authHeader.split(' ')[1];
-    if (token == null) return res.status(401).json({
-        error: 'Token não encontrado'
-    });
+    const authHeader = req.headers.authorization;
 }
 
 // Private routes
-app.post('/users/:id', authToken, async (req, res) => {
+app.post('/users/:id', async (req, res) => {
     const { id } = req.params
     // get user id without password from database
 db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
