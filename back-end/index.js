@@ -73,7 +73,7 @@ app.post('/auth/register', async (req, res) => {
                 message: 'Please enter a valid email address'
             });
         }
-        if (result) {
+        if (result.length > 0) {
             return res.status(400).json({
                 message: 'Email already exists'
             });
