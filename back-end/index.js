@@ -20,29 +20,37 @@ const db = mysql.createPool({
     database: 'sigamais'
 });
 
+function authToken (req, res, next) {
+    const authHeader = req.headers['authorization'];
+    // Bearer token (Token Format)
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) {
+    return res.status(400).json({ error: 'Token não encontrado' });
+    }
+}
 
 // Private routes
-app.get('/users/:id', async (req, res) => {
+app.get('/users/:id', authToken, async (req, res) => {
     const { id } = req.params
     // get user id without password from database
 db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
     delete result[0].password;
         if (err) {
-            res.status(500).send({
+            return    res.status(500).send({
                 error: err
             });
         } else {
-            res.json({
+            return    res.json({
                 user: result[0]
             });
         }
     }); 
 });
 
-
 // Public routes
 app.get('/', (req, res) => {
-    res.status(200).json({
+    return res.status(200).json({
         message: 'Welcome'
     });
 });
