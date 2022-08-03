@@ -1,11 +1,17 @@
+require('dotenv').config();
 const express = require('express');
-const app = express();
 const mysql = require('mysql');
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
+const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+const tokenSecret = process.env.TOKEN_SECRET;
+
 
 const db = mysql.createPool({
     host: '127.0.0.1',
@@ -14,120 +20,131 @@ const db = mysql.createPool({
     database: 'sigamais'
 });
 
-app.get('/painel/get/users_instagram', (req, res) => {
-    db.query(`SELECT * FROM users_instagram`, (err, results) => {
+function authToken (req, res, next) {
+    const authHeader = req.headers['authorization'];
+    // Bearer token (Token Format)
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (token == null) {
+    return res.status(400).json({ error: 'Token não encontrado' });
+    }
+    try {
+        jwt.verify(token, tokenSecret);
+        next();
+    }
+    catch (err) {
+        return res.status(401).json({ error: 'Token inválido' });
+    }
+}
+
+// Private routes
+app.get('/users/:id', authToken, async (req, res) => {
+    const { id } = req.params
+    // get user id without password from database
+db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
+    delete result[0].password;
         if (err) {
-            res.json({
-                status: 'error',
-                message: err
-            })
-        } else {
-            res.json({
-                status: 'success',
-                data: {
-                    id: results[0].id,
-                    username: results[0].username,
-                    password: results[0].password,
-                    email: results[0].email,
-
-                }
-            })
-
-
-
-        }
-    })
-})
-
-app.post('/painel/add/users_instagram', (req, res) => {
-    const { email, username, codsecurity} = req.body;
-    db.query("SELECT * FROM users_instagram WHERE email = ?", [email], (err, result) => {
-        if (result.length > 0) {
-            res.json({
-                status: 'error',
-                message: 'Email já cadastrado'
+            return    res.status(500).send({
+                error: err
             });
         } else {
-            db.query("INSERT INTO users_instagram (email, username, codsecurity) VALUES (?, ?, ?)", [email, username, codsecurity], (err, result) => {
-                if (err) {
-                    res.json({
-                        status: 'error',
-                        message: 'Erro ao cadastrar'
-                    });
-                } else {
-                    res.json({
-                        status: 'success',
-                        message: 'Cadastrado com sucesso',
-                        result: {
-                            id: result.insertId,
-                            email: email,
-                            username: username,
-                            codsecurity: codsecurity,
+            return    res.json({
+                user: result[0]
+            });
+        }
 
-                        }
+    }); 
+});
+
+// Public routes
+app.get('/', (req, res) => {
+    return res.status(200).json({
+        message: 'Welcome'
+    });
+});
+
+app.post('/auth/register', async (req, res) => {
+    const { email, password, confirmPassword } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+        if (password !== confirmPassword) {
+            return res.status(400).json({
+                message: 'Passwords do not match'
+            });
+        }
+        if (!email || !password) {
+            return res.status(400).json({
+                message: 'Please fill in all fields'
+            });
+        }
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: 'Password must be at least 8 characters long'
+            });
+        }
+        if (!email.includes('@')) {
+            return res.status(400).json({
+                message: 'Please enter a valid email address'
+            });
+        }
+        if (result.length > 0) {
+            return res.status(400).json({
+                message: 'Email already exists'
+            });
+        }
+        else {
+            // Hash password
+            // Insert user into database
+            db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, hashedPassword], (err, result) => {
+                try {
+                if (result) {
+                    return res.status(200).json({
+                        message: 'User created'
+                    });
+                }
+                } catch (err) {
+                    return res.status(400).json({
+                        message: 'Something went wrong'
                     });
                 }
             });
         }
     });
 });
-    
-app.post("/register", (req, res) => {
-    const { email, password } = req.body;
-  
-    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
-       
-            if (result.length > 0) {
-                res.json({
-                    status: 'error',
-                    message: 'Email já cadastrado'
-                });
 
-            } else {
-                db.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, password], (err, result) => {
-                    if (err) {
-                        res.json({
-                            status: 'error',
-                            message: 'Erro ao cadastrar'
-                        });
-                    } else {
-                        res.json({
-                            status: 'success',
-                            message: 'Cadastrado com sucesso'
-                        });
-                    }
-                });
-        }
-        }
-    );
-  });
-
-  app.post("/login", (req, res) => {
+app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
-    db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+    db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
         if (err) {
-            res.json({
+            return res.json({
                 status: 'error',
-                message: 'Erro ao logar'
+                message: err
             });
             
         } else {
             if (result.length > 0) {
-                if (result[0].password === password) {
-                    res.json({
+                if ((bcrypt.compareSync(password, result[0].password))) {
+                    const token = jwt.sign({
+                        id: result[0].id
+                    }, tokenSecret, {
+                        expiresIn: '1h'
+                    });
+                    return res.status(200).json({
                         status: 'success',
-                        message: 'Login realizado com sucesso'
+                        message: 'Login realizado com sucesso',
+                        token: token
                     });
 
                 } else {
-                    res.json({
+                    return res.json({
                         status: 'error',
                         message: 'Senha incorreta'
                     });
 
                 }
             } else {
-                res.json({
+                return res.json({
                     status: 'error',
                     message: 'Email não cadastrado'
                 });
@@ -135,7 +152,8 @@ app.post("/register", (req, res) => {
         }
         }
     );
-  });
+});           
+
 
 
 app.listen(3001,  () => {
