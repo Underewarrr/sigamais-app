@@ -2,7 +2,7 @@
 Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecimento com node e javascript etc...
 
 ### Documentação
-- Login e Registro com `bcrypt` Autenticação JWT https://github.com/Underewarrr/sigamais-app/pulls
+- Login e Registro com `bcrypt` Autenticação JWT (https://github.com/Underewarrr/sigamais-app/pull/13)
 
 ### Configs
 Entre na pasta back-end e front-end e rode `npm install`
