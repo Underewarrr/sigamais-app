@@ -26,6 +26,7 @@ app.get('/users/:id', async (req, res) => {
     const { id } = req.params
     // get user id without password from database
 db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
+    delete result[0].password;
         if (err) {
             res.status(500).send({
                 error: err
