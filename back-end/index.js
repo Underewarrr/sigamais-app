@@ -22,7 +22,7 @@ const db = mysql.createPool({
 
 
 // Private routes
-app.post('/users/:id', async (req, res) => {
+app.get('/users/:id', async (req, res) => {
     const { id } = req.params
     // get user id without password from database
 db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
@@ -35,9 +35,7 @@ db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
                 user: result[0]
             });
         }
-    });
-   
-   
+    }); 
 });
 
 
@@ -102,7 +100,7 @@ app.post('/auth/login', async (req, res) => {
     const { email, password } = req.body;
     db.query("SELECT * FROM users WHERE email = ?", email, (err, result) => {
         if (err) {
-            res.json({
+            return res.json({
                 status: 'error',
                 message: err
             });
@@ -115,21 +113,21 @@ app.post('/auth/login', async (req, res) => {
                     }, tokenSecret, {
                         expiresIn: '1h'
                     });
-                    res.status(200).json({
+                    return res.status(200).json({
                         status: 'success',
                         message: 'Login realizado com sucesso',
                         token: token
                     });
 
                 } else {
-                    res.json({
+                    return res.json({
                         status: 'error',
                         message: 'Senha incorreta'
                     });
 
                 }
             } else {
-                res.json({
+                return res.json({
                     status: 'error',
                     message: 'Email não cadastrado'
                 });
@@ -137,35 +135,9 @@ app.post('/auth/login', async (req, res) => {
         }
         }
     );
-});
-             
-// Private routes
-app.get('/users/:id', async (req, res) => {
-    const { id } = req.params;
-    // check if user exists in database
-    const user = await db.query(`SELECT * FROM users WHERE id = ?`, [id]);
-    if (user.length === 0) {
-      return  res.status(404).json({
-        status: 'error',
-      })
-    
-    } else {
-        if (user.length > 0) {
-            // get user id without password from database
-            db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
-                if (err) {
-                    res.status(500).send({
-                        error: err
-                    });
-                } else {
-                    res.json({
-                        user: result[0].id
-                    });
-                }
-            });
-        } 
-    }
-})
+});           
+
+
 
 app.listen(3001,  () => {
     console.log('Server is running on port 3001');
