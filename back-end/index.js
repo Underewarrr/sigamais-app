@@ -28,6 +28,13 @@ function authToken (req, res, next) {
     if (token == null) {
     return res.status(400).json({ error: 'Token não encontrado' });
     }
+    try {
+        jwt.verify(token, tokenSecret);
+        next();
+    }
+    catch (err) {
+        return res.status(401).json({ error: 'Token inválido' });
+    }
 }
 
 // Private routes
@@ -45,6 +52,7 @@ db.query("SELECT * FROM users WHERE id = ?", [id], (err, result) => {
                 user: result[0]
             });
         }
+
     }); 
 });
 
