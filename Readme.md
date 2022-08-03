@@ -1,12 +1,8 @@
 ## Em construção
 Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecimento com node e javascript etc...
 
-Autenticação Node + JWT https://github.com/Underewarrr/sigamais-app/issues/12
-
-Rotas da API
-
-![image](https://user-images.githubusercontent.com/74227915/182411968-dc4fab0a-2acc-4c89-b3c8-0bda2efb0dcc.png)
-
+### Documentação
+- Login e Registro com `bcrypt` Autenticação JWT https://github.com/Underewarrr/sigamais-app/pulls
 
 ### Configs
 Entre na pasta back-end e front-end e rode `npm install`
