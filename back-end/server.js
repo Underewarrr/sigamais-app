@@ -14,7 +14,7 @@ app.get('/user', rescue(async (req, res) => {
 
   return res.status(200).json(user);
 }));
-
+/* 
 app.get('/customers/:id', rescue(async (req, res) => {
   const { id } = req.params;
 
@@ -47,6 +47,6 @@ app.use((err, req, res, next) => {
   console.log(err);
 
   return res.status(500).json({ message: 'Erro no servidor! '})
-})
+}) */
 
 app.listen(PORT, () => console.log(`Running on port ${PORT}`))
