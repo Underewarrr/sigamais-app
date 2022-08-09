@@ -38,6 +38,13 @@ async function create({ name, cpf, email, password }) {
   return { id: insertId, name, cpf, email, password }
 }
 
+async function loginByEmail({ email, password }) {
+  const [ customer ] = await connection.execute(`
+    SELECT id, name, cpf, email, password FROM customer WHERE email = ? AND password = ?`, [email, password]);
+
+  return customer;
+}
+
 async function update(id, { name, cpf, email, password }) {
   await connection.execute(`
     UPDATE customer SET name = ?, email = ?, password = ?, cpf = ? WHERE id = ?`,
@@ -49,4 +56,4 @@ function deleteOne(id) {
 }
 
 
-module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail };
+module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail, loginByEmail };
