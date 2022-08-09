@@ -1,3 +1,4 @@
+// credits andré soares for the original code
 const express = require('express');
 const rescue = require('./rescue');
 const customerModel = require('./models/customers');
