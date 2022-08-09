@@ -22,6 +22,14 @@ async function getByCpf(cpf) {
   return customer;
 }
 
+async function getByEmail(email) {
+  const [ customer ] = 
+  await connection.execute(`SELECT id, name, cpf, email FROM customer WHERE email = ?`,
+  [email]);
+
+  return customer;
+}
+
 async function create({ name, cpf, email, password }) {
   const [ { insertId } ] = await connection.execute(`INSERT INTO customer (name, cpf, email, password)
     VALUES (?, ?, ?, ?)
@@ -40,4 +48,4 @@ function deleteOne(id) {
   return connection.execute("DELETE FROM customer WHERE id = ?", [id]);
 }
 
-module.exports = { getAll, create, update, deleteOne, getOne, getByCpf };
+module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail };
