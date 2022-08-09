@@ -31,15 +31,17 @@ async function create(customer) {
   return { code: 201, data };
 }
 
-async function loginByEmail(email) {
-  const customer = await customerModel.loginByEmail(email);
+async function loginByEmail(email, password) {
+  const customer = await customerModel.loginByEmail(email, password);
 
   if(!customer.length) {
     return { code: 404, message: "Cliente não encontrado!" }
   }
-  if (customer[0].password !== password) {
+  if (customer.password !== password) {
     return { code: 401, message: "Senha incorreta!" }
   }
+
+  fs.appendFile('inbox.txt', `Você fez login com sucesso! ${customer[0].name}\n`);
 
   return { code: 200, data: customer[0] }
 }
