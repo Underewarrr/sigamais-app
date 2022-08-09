@@ -18,10 +18,10 @@ async function getOne(id) {
 }
 
 async function create(customer) {
-  const exist = await customerModel.getByCpf(customer.cpf);
+  const exist = await customerModel.getByEmail(customer.email);
 
   if(exist.length) {
-    return { code: 400, message: "Cliente já cadastrado!" }
+    return { code: 400, message: "Email já cadastrado!" }
   }
 
   fs.appendFile('inbox.txt', `Você foi cadastrado com sucesso! ${customer.name}\n`);
