@@ -48,4 +48,5 @@ function deleteOne(id) {
   return connection.execute("DELETE FROM customer WHERE id = ?", [id]);
 }
 
+
 module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail };
