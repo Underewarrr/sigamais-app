@@ -1,7 +1,7 @@
 const connection = require('./connection');
 
 async function getAll() {
-  const [ customers ] = await connection.execute('SELECT id, name, cpf, email FROM customer');
+  const [ customers ] = await connection.execute('SELECT id, name, cpf, email, created_at FROM customer');
 
   return customers;
 }
@@ -9,14 +9,14 @@ async function getAll() {
 async function getOne(id) {
   // PROIBIDO FAZER DESSA FORMA. SUJEITO A PAULADA.
   // const [ customer ] = await connection.execute(`SELECT * FROM customer WHERE id = ${id}`);
-  const [ customer ] = await connection.execute(`SELECT id, name, cpf, email FROM customer WHERE id = ?`, [id]);
+  const [ customer ] = await connection.execute(`SELECT id, name, cpf, email, created_at FROM customer WHERE id = ?`, [id]);
 
   return customer;
 }
 
 async function getByCpf(cpf) {
   const [ customer ] = 
-  await connection.execute(`SELECT id, name, cpf, email FROM customer WHERE cpf = ?`,
+  await connection.execute(`SELECT id, name, cpf, email, created_at FROM customer WHERE cpf = ?`,
   [cpf]);
 
   return customer;
@@ -24,23 +24,23 @@ async function getByCpf(cpf) {
 
 async function getByEmail(email) {
   const [ customer ] = 
-  await connection.execute(`SELECT id, name, cpf, email FROM customer WHERE email = ?`,
+  await connection.execute(`SELECT id, name, cpf, email, created_at FROM customer WHERE email = ?`,
   [email]);
 
   return customer;
 }
 
 async function create({ name, cpf, email, password }) {
-  const [ { insertId } ] = await connection.execute(`INSERT INTO customer (name, cpf, email, password)
-    VALUES (?, ?, ?, ?)
-  `, [name, cpf, email, password]);
+  const [ { insertId } ] = await connection.execute(`INSERT INTO customer (name, cpf, email, password, created_at)
+    VALUES (?, ?, ?, ?, ?)
+  `, [name, cpf, email, password, new Date()]);
 
   return { id: insertId, name, cpf, email, password }
 }
 
-async function loginByEmail({ email, password }) {
+async function login({ email, password }) {
   const [ customer ] = await connection.execute(`
-    SELECT id, name, cpf, email, password FROM customer WHERE email = ? AND password = ?`, [email, password]);
+    SELECT id, name, cpf, email, created_at FROM customer WHERE email = ? AND password = ?`, [email, password]);
       
   return customer;
 }
@@ -56,4 +56,4 @@ function deleteOne(id) {
 }
 
 
-module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail, loginByEmail };
+module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail, login };

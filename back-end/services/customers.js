@@ -31,11 +31,11 @@ async function create(customer) {
   return { code: 201, data };
 }
 
-async function loginByEmail(email, password) {
-  const customer = await customerModel.loginByEmail(email, password);
+async function login(email, password) {
+  const customer = await customerModel.login(email, password);
 
   if(!customer.length) {
-    return { code: 404, message: "Cliente não encontrado!" }
+    return { code: 404, message: "Email não encontrado!" }
   }
   if (customer.password !== password) {
     return { code: 401, message: "Senha incorreta!" }
@@ -46,4 +46,4 @@ async function loginByEmail(email, password) {
   return { code: 200, data: customer[0] }
 }
 
-module.exports = { getAll, getOne, create, loginByEmail }
+module.exports = { getAll, getOne, create, login }
