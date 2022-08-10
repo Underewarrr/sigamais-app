@@ -1,5 +1,6 @@
 const customerModel = require('../models/customers');
 const fs = require('fs/promises');
+const bcyrpt = require('bcrypt');
 
 async function getAll() {
   const customer = await customerModel.getAll();
@@ -17,7 +18,7 @@ async function getOne(id) {
   return  { code: 200, data: customer[0] }
 }
 
-async function create(customer) {
+async function register(customer) {
   const exist = await customerModel.getByEmail(customer.email);
 
   if(exist.length) {
@@ -26,7 +27,7 @@ async function create(customer) {
 
   fs.appendFile('inbox.txt', `Você foi cadastrado com sucesso! ${customer.name}\n`);
 
-  const data = await customerModel.create(customer);
+  const data = await customerModel.register(customer);
 
   return { code: 201, data };
 }
@@ -34,16 +35,12 @@ async function create(customer) {
 async function login(email, password) {
   const customer = await customerModel.login(email, password);
 
-  if(!customer.length) {
+  if(!customer.email) {
     return { code: 404, message: "Email não encontrado!" }
   }
-  if (customer.password !== password) {
-    return { code: 401, message: "Senha incorreta!" }
+  if (bcyrpt.compareSync(password, customer.password)) {
+    fs.appendFile('inbox.txt', `Você fez login com sucesso! ${customer[0].name}\n`);
+    return { code: 200, data: customer };
   }
-
-  fs.appendFile('inbox.txt', `Você fez login com sucesso! ${customer[0].name}\n`);
-
-  return { code: 200, data: customer[0] }
 }
-
-module.exports = { getAll, getOne, create, login }
+  module.exports = { getAll, getOne, register, login }
