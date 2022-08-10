@@ -35,12 +35,11 @@ async function register(customer) {
 async function login(email, password) {
   const customer = await customerModel.login(email, password);
 
-  if(!customer.email) {
+  if(!customer) {
     return { code: 404, message: "Email não encontrado!" }
   }
-  if (bcyrpt.compareSync(password, customer.password)) {
-    fs.appendFile('inbox.txt', `Você fez login com sucesso! ${customer[0].name}\n`);
-    return { code: 200, data: customer };
+  if (bcyrpt.compare(password, customer[0].password)) {
+    return { code: 200, data: customer[0] };
   }
 }
   module.exports = { getAll, getOne, register, login }

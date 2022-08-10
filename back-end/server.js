@@ -14,8 +14,10 @@ app.use(express.json());
 app.get('/', (req, res) => res.json({ ok: true }))
 app.get('/customers', rescue(customerController.getAll));
 app.get('/customers/:id', rescue(customerController.getOne));
+
 app.post('/customers/create', rescue(customerController.register));
 app.post('/customers/login', rescue(customerController.login));
+
 app.post('/customers/:customerId/address', rescue(addressController.createAddress))
 
 

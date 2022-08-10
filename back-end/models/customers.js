@@ -42,11 +42,9 @@ function deleteOne(id) {
 }
 
 async function login({ email, password }) {
-  // login usando email e senha com bcrypt e jwt
-  const [ customer ] = await connection.execute(`SELECT id, name, cpf, email, created_at FROM customer WHERE email = ? AND password = ?`, [email, password]);
+  const [ customer ] = await connection.execute(`SELECT * FROM customer WHERE email = ?`, [email]);
 
   return customer;
-
 }
 async function register({ name, cpf, email, password }) {
   // register com bcrypt e salt
