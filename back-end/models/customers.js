@@ -42,12 +42,19 @@ function deleteOne(id) {
 }
 
 async function login({ email, password }) {
-  const [ customer ] = await connection.execute(`SELECT email FROM customer WHERE email = ?`, [email]);
+  const [ customer ] = await connection.execute(`SELECT * FROM customer WHERE email = ?`, [email]);
+
   return customer;
 }
 async function register({ name, cpf, email, password }) {
+  // register com bcrypt e salt
+  const salt = bcrypt.genSaltSync(10);
+  const hash = bcrypt.hashSync(password, salt);
+
   const [ insertId ] = await connection.execute(`
-    INSERT INTO customer (name, cpf, email, password) VALUES (?, ?, ?, ?)`, [name, cpf, email, password]);
+    INSERT INTO customer (name, cpf, email, password) VALUES (?, ?, ?, ?)`, [name, cpf, email, hash]);
+      
+
   return { id: insertId, name, cpf, email, password };
 }
 
