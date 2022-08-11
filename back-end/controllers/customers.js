@@ -29,12 +29,4 @@ async function createOne (req, res){
   return res.status(code).json(data);
 }
 
-async function loginByEmail(req, res) {
-  const { data, code, message } = await customerService.loginByEmail(req.body);
-    if (!data) {
-      return res.status(code).json({ message });
-    }
-    return res.status(code).json(data);
-}
-
-module.exports = { getAll, getOne, createOne, loginByEmail };
+module.exports = { getAll, getOne, createOne }

@@ -31,17 +31,5 @@ async function create(customer) {
   return { code: 201, data };
 }
 
-async function loginByEmail(email) {
-  const customer = await customerModel.loginByEmail(email);
 
-  if(!customer.length) {
-    return { code: 404, message: "Cliente não encontrado!" }
-  }
-  if (customer[0].password !== password) {
-    return { code: 401, message: "Senha incorreta!" }
-  }
-
-  return { code: 200, data: customer[0] }
-}
-
-module.exports = { getAll, getOne, create, loginByEmail }
+module.exports = { getAll, getOne, create }
