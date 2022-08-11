@@ -37,11 +37,8 @@ async function login(email, password) {
   if(!customer) {
     return { code: 404, message: "Email não encontrado!" }
   }
-  if (password !== customer.password) {
-    return { code: 400, message: "Senha incorreta!" }
-  }
   if (password === customer.password) {
-    return { code: 200, data: customer }
+    return { code: 200, data: customer, message: "Login realizado com sucesso!" }
   }
 }
   module.exports = { getAll, getOne, register, login }
