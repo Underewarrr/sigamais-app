@@ -42,7 +42,7 @@ function deleteOne(id) {
 }
 
 async function login({ email, password }) {
-  const [ customer ] = await connection.execute(`SELECT email FROM customer WHERE email = ? and password = ?`, [email, password]);
+  const [ customer ] = await connection.execute(`SELECT email FROM customer WHERE email = ?`, [email]);
   return customer;
 }
 async function register({ name, cpf, email, password }) {
