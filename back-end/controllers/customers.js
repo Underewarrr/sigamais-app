@@ -18,9 +18,9 @@ async function getOne(req, res){
   return res.status(code).json(data);
 }
 
-async function register (req, res){
+async function createOne (req, res){
 
-  const { data, message, code } = await customerService.register(req.body);
+  const { data, message, code } = await customerService.create(req.body);
 
   if(!data) {
     return res.status(code).json({ message })
@@ -37,5 +37,4 @@ async function login(req, res) {
     return res.status(code).json(data);
 }
 
-
-module.exports = { getAll, getOne, register, login };
+module.exports = { getAll, getOne, createOne, login };

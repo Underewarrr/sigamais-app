@@ -31,6 +31,14 @@ async function getByEmail(email) {
   return customer;
 }
 
+async function create({ name, cpf, email, password }) {
+  const [ { insertId } ] = await connection.execute(`INSERT INTO customer (name, cpf, email, password, created_at)
+    VALUES (?, ?, ?, ?, ?)
+  `, [name, cpf, email, password, new Date()]);
+
+  return { id: insertId, name, cpf, email, password }
+}
+
 async function update(id, { name, cpf, email, password }) {
   await connection.execute(`
   UPDATE customer SET name = ?, email = ?, password = ?, cpf = ? WHERE id = ?`,
@@ -42,22 +50,14 @@ function deleteOne(id) {
 }
 
 async function login({ email, password }) {
-  // login usando email e senha com bcrypt e jwt
-  const [ customer ] = await connection.execute(`SELECT id, name, cpf, email, created_at FROM customer WHERE email = ? AND password = ?`, [email, password]);
-
-  return customer;
-
-}
-async function register({ name, cpf, email, password }) {
-  // register com bcrypt e salt
-  const salt = bcrypt.genSaltSync(10);
-  const hash = bcrypt.hashSync(password, salt);
-
-  const [ insertId ] = await connection.execute(`
-    INSERT INTO customer (name, cpf, email, password) VALUES (?, ?, ?, ?)`, [name, cpf, email, hash]);
+  const [ customer ] = await connection.execute(`
+    SELECT id, name, cpf, email, created_at FROM customer WHERE email = ? AND password = ?`, [email, password]);
       
-
-  return { id: insertId, name, cpf, email, password };
+  return customer;
 }
 
-module.exports = { getAll, update, deleteOne, getOne, getByCpf, getByEmail, login, register };
+async function register({ name, cpf, email, password }) {
+
+}
+
+module.exports = { getAll, create, update, deleteOne, getOne, getByCpf, getByEmail, login };
