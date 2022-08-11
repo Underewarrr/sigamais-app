@@ -41,7 +41,7 @@ async function create({ name, cpf, email, password }) {
 async function loginByEmail({ email, password }) {
   const [ customer ] = await connection.execute(`
     SELECT id, name, cpf, email, password FROM customer WHERE email = ? AND password = ?`, [email, password]);
-      
+
   return customer;
 }
 
