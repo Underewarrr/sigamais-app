@@ -22,11 +22,10 @@ Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecime
  ***Front-End*** 
 > - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/1)
 > - Melhoria no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/4)
-> 
+> - Painel de cadastro de redes (https://github.com/Underewarrr/sigamais-app/pull/7)
  ***Back-End***
 > - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/3)
 > - Refatoração no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/5)
-> - Painel de cadastro de redes (https://github.com/Underewarrr/sigamais-app/pull/7)
 
  ***Refac's Back-End***
 > - Login e Registro via `API` com `bcrypt` Autenticação JWT (https://github.com/Underewarrr/sigamais-app/pull/13)
