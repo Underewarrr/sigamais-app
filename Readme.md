@@ -1,10 +1,38 @@
 ## Em construção
 Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecimento com node e javascript etc...
 
-### Documentação
-- Login e Registro via `API` com `bcrypt` Autenticação JWT (https://github.com/Underewarrr/sigamais-app/pull/13)
+## Em construção
+
+### Ferramentas Utilizadas no Front-End
+    Axios
+    Bootstrap
+    Formik
+    React-bootstrap 
+    Yup 
+### Ferramentas Utilizadas no Back-End
+    Axios
+    Cors
+    Ejs (Not Utilized YET)
+    Express
+    Mysql
+    Nodemon
+
+> Em Construção
+
+### Ordem de Pull Requests
+ ***Front-End*** 
+> - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/1)
+> - Melhoria no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/4)
+> 
+ ***Back-End***
+> - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/3)
+> - Melhoria no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/5)
+
+ ***Melhorias Back-End***
+> - Login e Registro via `API` com `bcrypt` Autenticação JWT (https://github.com/Underewarrr/sigamais-app/pull/13)
 
 ### Configs
+
 Entre na pasta back-end e front-end e rode `npm install`
 
 Após a instalação incie o servidor do back-end com
