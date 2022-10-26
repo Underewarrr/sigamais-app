@@ -12,7 +12,6 @@ Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecime
 ### Ferramentas Utilizadas no Back-End
     Axios
     Cors
-    Ejs (Not Utilized YET)
     Express
     Mysql
     Nodemon
