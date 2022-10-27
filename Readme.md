@@ -23,6 +23,7 @@ Neste projeto vou desenvolver algumas funcionalidades para testar meus conhecime
 > - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/1)
 > - Melhoria no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/4)
 > - Painel de cadastro de redes (https://github.com/Underewarrr/sigamais-app/pull/7)
+
  ***Back-End***
 > - Cria sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/3)
 > - Refatoração no sistema de login e registro (https://github.com/Underewarrr/sigamais-app/pull/5)
